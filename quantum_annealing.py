@@ -26,74 +26,10 @@ BETA = float(37)
 REDUC_PARA = 0.99
 
 #FILE_NAME = 'FILE_NAME'
-FILE_NAME =  "dj38.tsp"
-
-f = open(os.path.dirname(os.path.abspath(FILE_NAME))+"/"+FILE_NAME).read().split("\n")
-
-POINT = []
-for i in f:
-    POINT.append(i.split(" "))
-
-NCITY = len(POINT)
-TOTAL_TIME = NCITY
-for i in range(NCITY):
-    POINT[i].remove(POINT[i][0])
-for i in range(NCITY):
-    for j in range(2):
-        POINT[i][j] = float(POINT[i][j])
+#FILE_NAME =  "dj38.tsp"
 
 def distance(r1, r2):
     return math.sqrt((r1[1]-r2[1])**2 + (r1[0]-r2[0])**2)
-
-def getSpinConfig():
-
-    def spin_config_at_a_time_in_a_TROTTER_DIM(tag):
-        config = list(-np.ones(NCITY, dtype = np.int))
-        config[tag] = 1
-        return config
-
-    def spin_config_in_a_TROTTER_DIM(tag):
-        spin = []
-        spin.append(config_at_init_time)
-        for i in xrange(TOTAL_TIME-1):
-            spin.append(list(spin_config_at_a_time_in_a_TROTTER_DIM(tag[i])))
-        return spin
-
-    spin = []
-    for i in xrange(TROTTER_DIM):
-        tag = np.arange(1,NCITY)
-        np.random.shuffle(tag)
-        spin.append(spin_config_in_a_TROTTER_DIM(tag)) 
-    return spin
-
-def getBestRoute(config):   
-    length = []
-    for i in xrange(TROTTER_DIM):
-        route = []
-        for j in xrange(TOTAL_TIME):
-            route.append(config[i][j].index(1))
-        length.append(getTotaldistance(route))
-
-    min_Tro_dim = np.argmin(length)
-    Best_Route = []
-    for i in xrange(TOTAL_TIME):
-        Best_Route.append(config[min_Tro_dim][i].index(1))
-    return Best_Route
-
-
-def getTotaldistance(route):
-    Total_distance = 0
-    for i in xrange(TOTAL_TIME):
-        Total_distance += distance(POINT[route[i]],POINT[route[(i+1)%TOTAL_TIME]])/max_distance
-    return Total_distance
-
-
-def getRealTotaldistance(route):
-    Total_distance = 0
-    for i in xrange(TOTAL_TIME):
-        Total_distance += distance(POINT[route[i]], POINT[route[(i+1)%TOTAL_TIME]])
-    return Total_distance
-
 
 def QMC_move(config, ann_para):
     c = np.random.randint(0,TROTTER_DIM)
@@ -142,7 +78,72 @@ def QMC_move(config, ann_para):
             self.MC_STEP = l
             self.BETA = b
             self.reduc_para = r
-            
+            self.POINT = list()
+
+        def read(self,file):
+            f = open(os.path.dirname(os.path.abspath(file))+"/"+file.read().split("\n")
+
+            for i in f:
+                self.POINT.append(i.split(" "))
+
+            NCITY = len(self.POINT)
+            TOTAL_TIME = NCITY
+            for i in range(NCITY):
+                self.POINT[i].remove(self.POINT[i][0])
+            for i in range(NCITY):
+                for j in range(2):
+                    self.POINT[i][j] = float(self.POINT[i][j])
+
+            def getSpinConfig(self):
+
+                def spin_config_at_a_time_in_a_TROTTER_DIM(tag):
+                     config = list(-np.ones(NCITY, dtype = np.int))
+                     config[tag] = 1
+                return config
+                     
+            def spin_config_in_a_TROTTER_DIM(tag):
+                spin = []
+                spin.append(config_at_init_time)
+                for i in xrange(TOTAL_TIME-1):
+                     spin.append(list(spin_config_at_a_time_in_a_TROTTER_DIM(tag[i])))
+            return spin
+
+            spin = []
+            for i in xrange(TROTTER_DIM):
+                tag = np.arange(1,NCITY)
+                np.random.shuffle(tag)
+            spin.append(spin_config_in_a_TROTTER_DIM(tag)) 
+
+        return spin
+
+    def getBestRoute(config):   
+     length = []
+    for i in xrange(TROTTER_DIM):
+        route = []
+        for j in xrange(TOTAL_TIME):
+            route.append(config[i][j].index(1))
+        length.append(getTotaldistance(route))
+
+     min_Tro_dim = np.argmin(length)
+     Best_Route = []
+     for i in xrange(TOTAL_TIME):
+         Best_Route.append(config[min_Tro_dim][i].index(1))
+     return Best_Route
+
+
+                     def getTotaldistance(route):
+                     Total_distance = 0
+                     for i in xrange(TOTAL_TIME):
+                     Total_distance += distance(POINT[route[i]],POINT[route[(i+1)%TOTAL_TIME]])/max_distance
+                     return Total_distance
+
+
+                     def getRealTotaldistance(route):
+                     Total_distance = 0
+                     for i in xrange(TOTAL_TIME):
+                     Total_distance += distance(POINT[route[i]], POINT[route[(i+1)%TOTAL_TIME]])
+                     return Total_distance
+                     
 #QMC simulation
 if __name__ == '__main__':
 
