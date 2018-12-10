@@ -25,7 +25,8 @@ BETA = float(37)
 REDUC_PARA = 0.99
 
 #FILE_NAME = 'FILE_NAME'
-FILE_NAME =  "dj38.tsp"
+#FILE_NAME =  "dj38.tsp"
+FILE_NAME =  "uy734.tsp"
 
 f = open(os.path.dirname(os.path.abspath(FILE_NAME))+"/"+FILE_NAME).read().split("\n")
 

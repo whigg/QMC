@@ -10,6 +10,7 @@ import numpy as np
 import os
 import random
 import matplotlib.pyplot as plt
+import argparse
 
 # input paramater
 #TROTTER_DIM = int(input("Trotter dimension: "))
@@ -133,9 +134,28 @@ def QMC_move(config, ann_para):
 
     return config
 
+    class QMC :
+        def __init__(self,n,p,m,l,b,r):
+            self.TROTTER_DIM = n
+            self.ANN_PARA = p
+            self.ANN_STEP = m
+            self.MC_STEP = l
+            self.BETA = b
+            self.reduc_para = r
+            
 #QMC simulation
 if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--file",required=True,help="specify a file which contains cities's information.")
+    parser.add_argument("--trotter_dim",type=int,default=10)
+    parser.add_argument("--ann_para",type=float,default=1.0,help="initial annealing parameter")
+    parser.add_argument("--ann_step",type=int,default=330)
+    parser.add_argument("--mc_step",type=int,default=13320)
+    parser.add_argument("--beta",type=float,default=float(37))
+    parser.add_argument("--reduc_para",type=float,default=0.99)
+    args = parser.parse_args()
+    
     max_distance = 0
     for i in range(NCITY):
         for j in range(NCITY):
