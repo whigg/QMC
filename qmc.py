@@ -25,10 +25,12 @@ class QMC :
         self.max_distance = 0
 
     def read(self,file):
-        f = open(os.path.dirname(os.path.abspath(file))+"/"+file).read().split("\n")
+        #f = open(os.path.dirname(os.path.abspath(file))+"/"+file).read().split("\n")
+        f = open(file).read().split("\n")
 
         for i in f:
-            self.POINT.append(i.split(" "))
+            if type(i.split(" ")[0]) is int :
+                self.POINT.append(i.split(" "))
 
         self.NCITY = len(self.POINT)
         self.TOTAL_TIME = self.NCITY
