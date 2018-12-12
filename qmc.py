@@ -29,7 +29,7 @@ class QMC :
         f = open(file).read().split("\n")
 
         for i in f:
-            if type(i.split(" ")[0]) is int :
+             if int(i.split(" ")[0]) :
                 self.POINT.append(i.split(" "))
 
         self.NCITY = len(self.POINT)

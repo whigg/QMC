@@ -53,7 +53,7 @@ if __name__ == '__main__':
         print "Step:{}, Annealing Parameter:{}, length:{}".format(t+1,anneal.ANN_PARA, length)
         anneal.ANN_PARA *= anneal.reduc_para
 
-    Route = anneal.getBestRoute(spin,max_distance)
+    Route = anneal.getBestRoute(spin)
     Total_Length = anneal.getRealTotaldistance(Route)
     elapsed_time = time.clock()-t0
 
