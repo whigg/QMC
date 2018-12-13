@@ -21,12 +21,12 @@ if __name__ == '__main__':
     parser.add_argument("--file",required=True,help="specify a file which contains cities's information.")
     parser.add_argument("--trotter_dim",type=int,default=10)
     parser.add_argument("--ann_para",type=float,default=1.0,help="initial annealing parameter")
-    parser.add_argument("--ann_step",type=int,default=330)
-    parser.add_argument("--mc_step",type=int,default=13320)
-    parser.add_argument("--beta",type=float,default=float(37))
+    parser.add_argument("--ann_step",type=int,default=100)
+    parser.add_argument("--mc_step",type=int,default=1000)
+    parser.add_argument("--beta",type=float,default=float(37),help="beta is inverse temparture beta = 1.0/(kb*T), kb=")
     parser.add_argument("--reduc_para",type=float,default=0.99)
     args = parser.parse_args()
-
+    
     # prepare annealer
     anneal = qmc.QMC(args.trotter_dim,args.ann_para,args.ann_step,args.mc_step,args.beta,args.reduc_para)
     anneal.read(args.file)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     # prepare for figure
     fig,ax = plt.subplots(1,1)
-    lines, = ax.plot(optimal_pos_x,optimal_pos_y)
+    lines, = ax.plot(list(),list(),lw=2.0)
 
     np.random.seed(100)
     spin = anneal.getSpinConfig(config_at_init_time)
@@ -71,17 +71,19 @@ if __name__ == '__main__':
             con = anneal.move(spin)
             rou = anneal.getBestRoute(con)
             length = anneal.getRealTotaldistance(rou)
-            # make plot data
-            x = list()
-            y = list()
-            for l in range(len(rou)):
-                x.append((anneal.POINT[rou[l]])[0])
-                y.append((anneal.POINT[rou[l]])[1])
-            plt.plot(optimal_pos_x,optimal_pos_y,"ro-")
-            lines.set_data(x,y)
-            ax.set_xlim(min(x),max(x))
-            ax.set_ylim(min(y),max(y))
-            plt.pause(0.01)
+            if i%10 == 0 :
+                # make plot data
+                x = list()
+                y = list()
+                for l in range(len(rou)):
+                    x.append((anneal.POINT[rou[l]])[0])
+                    y.append((anneal.POINT[rou[l]])[1])
+                plt.plot(optimal_pos_x,optimal_pos_y,"ro:",lw=0.1)
+                lines.set_data(x,y)
+                ax.set_xlim(min(x),max(x))
+                ax.set_ylim(min(y),max(y))
+                ax.set_title("beta="+str(anneal.BETA)+" anneal_step= "+str(t)+" MC_step="+str(i))
+                plt.pause(0.001)
         LengthList.append(length)
         print "Step:{}, Annealing Parameter:{}, length:{}".format(t+1,anneal.ANN_PARA, length)
         anneal.ANN_PARA *= anneal.reduc_para
