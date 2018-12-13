@@ -49,18 +49,17 @@ if __name__ == '__main__':
     for i in range(len(anneal.POINT)):
         list_x.append(anneal.POINT[i][0])
         list_y.append(anneal.POINT[i][1])
-    
     solver = TSPSolver.from_data(list_x,list_y,norm="EUC_2D")
     optimal_tour = solver.solve()
 
-    # extract 
+    # extract positions of optimal tour
     optimal_pos_x =  list()
     optimal_pos_y =  list()
     for i in range(len(anneal.POINT)) :
         optimal_pos_x.append(anneal.POINT[optimal_tour.tour[i]][0])
         optimal_pos_y.append(anneal.POINT[optimal_tour.tour[i]][1])
 
-    # for figure
+    # prepare for figure
     fig,ax = plt.subplots(1,1)
     lines, = ax.plot(optimal_pos_x,optimal_pos_y)
 
@@ -78,7 +77,7 @@ if __name__ == '__main__':
             for l in range(len(rou)):
                 x.append((anneal.POINT[rou[l]])[0])
                 y.append((anneal.POINT[rou[l]])[1])
-            plt.plot(optimal_pos_x,optimal_pos_y)
+            plt.plot(optimal_pos_x,optimal_pos_y,"ro-")
             lines.set_data(x,y)
             ax.set_xlim(min(x),max(x))
             ax.set_ylim(min(y),max(y))
@@ -91,8 +90,6 @@ if __name__ == '__main__':
     Total_Length = anneal.getRealTotaldistance(Route)
     elapsed_time = time.clock()-t0
 
-
-    
     print "shortest path is {}".format(Route)
     print "shortest lenght is {}".format(Total_Length)
     print "processing time is {}s".format(elapsed_time)
