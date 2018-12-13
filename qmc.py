@@ -121,7 +121,7 @@ class QMC :
             config[c][a][q]*=-1
             config[c][b][p]*=-1
             config[c][b][q]*=-1
-        elif np.random.random() < np.exp(-self.BETA*self.ANN_PARA*delta_cost):
+        elif np.random.random() < np.exp(-self.BETA*delta_cost):
             config[c][a][p]*=-1
             config[c][a][q]*=-1
             config[c][b][p]*=-1
