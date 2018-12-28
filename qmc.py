@@ -28,11 +28,9 @@ class QMC :
 
     def read(self,file):
         f = open(file).read().split("\n")
-
         for i in f:
              if (i.split(" ")[0]).isdigit() : # ignore header of data
                 self.POINT.append(i.split(" "))
-
         self.NCITY = len(self.POINT)
         self.TOTAL_TIME = self.NCITY
         for i in range(self.NCITY):
@@ -44,11 +42,14 @@ class QMC :
     # save spin configuration
     def save(self):
         file = open("./spin_conf-"+datetime.now().isoformat(),mode=w)
+        file.write("#num of city %d\n"%self.NCITY)
         file.write("#beta %f\n"%self.BETA)
+        file.write("#anneal step %d\n"%self.ANN_STEP)
+        file.write("#mc step %d\n"%self.MC_STEP)
         for k in range():
             for j in range():
                 for i in range():
-                file.write(conf[i][j][k]+"\n")
+                    file.write(conf[i][j][k]+"\n")
         file.close()
 
     # spin configurations at a time and some trotter dimension
