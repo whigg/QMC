@@ -100,10 +100,15 @@ if __name__ == '__main__':
     Total_Length = anneal.getRealTotaldistance(Route)
     elapsed_time = time.clock()-t0
 
+    # save configuration
+    anneal.save(spin)
+
     print "shortest path is {}".format(Route)
     print "shortest lenght is {}".format(Total_Length)
     print "processing time is {}s".format(elapsed_time)
 
     plt.plot(LengthList)
     plt.show()
+
+    
 

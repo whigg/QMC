@@ -7,6 +7,8 @@ import random
 import numpy as np
 import os
 import math
+from datetime import datetime        
+
 
 def distance(r1, r2):
     return math.sqrt((r1[1]-r2[1])**2 + (r1[0]-r2[0])**2)
@@ -88,6 +90,15 @@ class QMC :
             Total_distance += distance(self.POINT[route[i]], self.POINT[route[(i+1)%self.TOTAL_TIME]])
         return Total_distance
 
+    def save(self):
+        file = open("./spin_conf-"+datetime.now().isoformat(),mode=w)
+        for k in range():
+            for j in range():
+                for i in range():
+                    file.write(conf[i][j][k]+"\n")
+        file.close()
+        return 0
+    
     def move(self,conf):
         c = np.random.randint(0,self.TROTTER_DIM)
         a_ = range(1,self.TOTAL_TIME)
