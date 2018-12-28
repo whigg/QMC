@@ -40,6 +40,16 @@ class QMC :
         for i in range(self.NCITY):
             for j in range(2):
                  self.POINT[i][j] = float(self.POINT[i][j])
+                 
+    # save spin configuration
+    def save(self):
+        file = open("./spin_conf-"+datetime.now().isoformat(),mode=w)
+        file.write("#beta %f\n"%self.BETA)
+        for k in range():
+            for j in range():
+                for i in range():
+                file.write(conf[i][j][k]+"\n")
+        file.close()
 
     # spin configurations at a time and some trotter dimension
     def spin_conf_at_a_time_in_a_TROTTER_DIM(self,tag):
@@ -90,14 +100,7 @@ class QMC :
             Total_distance += distance(self.POINT[route[i]], self.POINT[route[(i+1)%self.TOTAL_TIME]])
         return Total_distance
 
-    def save(self):
-        file = open("./spin_conf-"+datetime.now().isoformat(),mode=w)
-        for k in range():
-            for j in range():
-                for i in range():
-                    file.write(conf[i][j][k]+"\n")
-        file.close()
-        return 0
+
     
     def move(self,conf):
         c = np.random.randint(0,self.TROTTER_DIM)
