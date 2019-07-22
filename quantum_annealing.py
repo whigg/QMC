@@ -16,7 +16,7 @@ import qmc
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--file",required=True,help="specify a file which contains cities's information.")
+    parser.add_argument("--file",type=str,default="./data/wi29.tsp",help="specify a file which contains cities's information.")
     parser.add_argument("--trotter_dim",type=int,default=10)
     parser.add_argument("--ann_para",type=float,default=1.0,help="initial annealing parameter")
     parser.add_argument("--ann_step",type=int,default=330)
@@ -42,12 +42,12 @@ if __name__ == '__main__':
     t0 = time.clock()
 
     np.random.seed(100)
-    spin = anneal.getSpinConfig(config_at_init_time)
+    spin = anneal.getSpinConf(config_at_init_time)
     LengthList = list()
     for t in range(anneal.ANN_STEP):
         for i in range(anneal.MC_STEP):
             con = anneal.move(spin)
-            rou = anneal.getBestRoute(con)
+            rou = anneal.getBestPath(con)
             length = anneal.getRealTotaldistance(rou)
         LengthList.append(length)
         print "Step:{}, Annealing Parameter:{}, length:{}".format(t+1,anneal.ANN_PARA, length)
