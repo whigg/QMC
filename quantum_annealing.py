@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # prepare annealer
     anneal = qmc.QMC(args.trotter_dim,args.ann_para,args.ann_step,args.mc_step,args.beta,args.reduc_para)
     anneal.read(args.file)
-    
+
     anneal.max_distance = 0
     for i in range(anneal.NCITY):
         for j in range(anneal.NCITY):
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     for t in range(anneal.ANN_STEP):
         for i in range(anneal.MC_STEP):
             con = anneal.move(spin)
-            rou = anneal.getBestPath(con)
-            length = anneal.getRealTotaldistance(rou)
+            path = anneal.getBestPath(con)
+            length = anneal.getRealTotaldistance(path)
         LengthList.append(length)
         print "Step:{}, Annealing Parameter:{}, length:{}".format(t+1,anneal.ANN_PARA, length)
         anneal.ANN_PARA *= anneal.reduc_para
@@ -63,4 +63,3 @@ if __name__ == '__main__':
 
     plt.plot(LengthList)
     plt.show()
-

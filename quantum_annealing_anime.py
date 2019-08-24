@@ -24,15 +24,15 @@ if __name__ == '__main__':
     parser.add_argument("--ann_para",type=float,default=1.0,help="initial annealing parameter")
     parser.add_argument("--ann_step",type=int,default=100)
     parser.add_argument("--mc_step",type=int,default=1000)
-    parser.add_argument("--beta",type=float,default=float(37),help="beta is inverse temparture beta = 1.0/(kb*T), kb=")
+    parser.add_argument("--beta",type=float,default=float(37),help="beta is inverse temparture beta = 1.0/(kb*T)")
     parser.add_argument("--reduc_para",type=float,default=0.99)
     parser.add_argument("--monitor_step",type=float,default=10)
     args = parser.parse_args()
-    
+
     # prepare annealer
     anneal = qmc.QMC(args.trotter_dim,args.ann_para,args.ann_step,args.mc_step,args.beta,args.reduc_para)
     anneal.read(args.file)
-    
+
     anneal.max_distance = 0
     for i in range(anneal.NCITY):
         for j in range(anneal.NCITY):
@@ -89,7 +89,6 @@ if __name__ == '__main__':
                 ax.set_ylim(min(y),max(y))
                 ax.set_title("beta="+str(anneal.BETA)+" anneal_step= "+str(t)+\
                              " MC_step="+str(i))
-            
                 plt.legend()
                 plt.pause(0.001)
         LengthList.append(length)
@@ -109,6 +108,3 @@ if __name__ == '__main__':
 
     plt.plot(LengthList)
     plt.show()
-
-    
-
