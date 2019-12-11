@@ -101,8 +101,6 @@ class QMC :
             Total_distance += distance(self.POINT[route[i]], self.POINT[route[(i+1)%self.TOTAL_TIME]])
         return Total_distance
 
-
-
     def move(self,conf):
         c = np.random.randint(0,self.TROTTER_DIM)
         a_ = range(1,self.TOTAL_TIME)
@@ -158,22 +156,15 @@ class QMC :
         for j in range(self.NCITY):
             d_pj = distance(self.POINT[p], self.POINT[j])
             d_qj = distance(self.POINT[q], self.POINT[j])
-            if a+1 >= self.NCITY:
-                delta_costc += 2*(conf[c][a-1][j] + conf[c][1][j] - conf[c][b-1][j] - conf[c][b+1][j])(d_qj - d_pj)
-            elif a-1 < 1:
-                delta_costc += 2*(conf[c][self.NCITY][j] + conf[c][a+1][j] - conf[c][b-1][j] - conf[c][b+1][j])(d_qj - d_pj)
-            elif b+1 >= self.NCITY:
-                delta_costc += 2*(conf[c][a-1][j] + conf[c][a+1][j] - conf[c][b-1][j] - conf[c][1][j])(d_qj - d_pj)
-            elif b-1 < 1:
-                delta_costc += 2*(conf[c][a-1][j] + conf[c][a+1][j] - conf[c][self.NCITY][j] - conf[c][b+1][j])(d_qj - d_pj)
-            else :
-                delta_costc += 2*(conf[c][a-1][j] + conf[c][a+1][j] - conf[c][b-1][j] - conf[c][b+1][j])(d_qj - d_pj)
+
+            delta_costc += 2*(conf[c][a-1][j]+conf[c][(a+1)%self.TOTAL_TIME][j]-conf[c][b-1][j]-conf[c][(b+1)%self.TOTAL_TIME][j])*(d_qj - d_pj)
 
         para = (1/self.BETA)*math.log(math.cosh(self.BETA*self.ANN_PARA/self.TROTTER_DIM)/math.sinh(self.BETA*self.ANN_PARA/self.TROTTER_DIM))
-        delta_costq_1 = conf[c][a][p]*(conf[c-1][a][p]+conf[c+1][a][p])
-        delta_costq_2 = conf[c][a][q]*(conf[c-1][a][q]+conf[c+1][a][q])
-        delta_costq_3 = conf[c][b][p]*(conf[c-1][b][p]+conf[c+1][b][p])
-        delta_costq_4 = conf[c][b][q]*(conf[c-1][b][q]+conf[c+1][b][q])
+
+        delta_costq_1 = conf[c][a][p]*(conf[(c-1)%self.TROTTER_DIM][a][p]+conf[(c+1)%self.TROTTER_DIM][a][p])
+        delta_costq_2 = conf[c][a][q]*(conf[(c-1)%self.TROTTER_DIM][a][q]+conf[(c+1)%self.TROTTER_DIM][a][q])
+        delta_costq_3 = conf[c][b][p]*(conf[(c-1)%self.TROTTER_DIM][b][p]+conf[(c+1)%self.TROTTER_DIM][b][p])
+        delta_costq_4 = conf[c][b][q]*(conf[(c-1)%self.TROTTER_DIM][b][q]+conf[(c+1)%self.TROTTER_DIM][b][q])
 
         delta_cost = delta_costc/self.TROTTER_DIM + para*(delta_costq_1 + delta_costq_2 + delta_costq_3 + delta_costq_4)
 

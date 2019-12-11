@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument("--file",type=str,default="./data/wi29.tsp",help="specify a file which contains cities's information.")
     parser.add_argument("--trotter_dim",type=int,default=10)
     parser.add_argument("--ann_para",type=float,default=1.0,help="initial annealing parameter")
-    parser.add_argument("--ann_step",type=int,default=330)
+    parser.add_argument("--ann_step",type=int,default=3300)
     parser.add_argument("--mc_step",type=int,default=13320)
     parser.add_argument("--beta",type=float,default=float(37))
     parser.add_argument("--reduc_para",type=float,default=0.99)
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     LengthList = list()
     for t in range(anneal.ANN_STEP):
         for i in range(anneal.MC_STEP):
-            con = anneal.move(spin)
+            con = anneal.move_imp(spin)
             path = anneal.getBestPath(con)
             length = anneal.getRealTotaldistance(path)
         LengthList.append(length)
