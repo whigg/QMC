@@ -1,7 +1,6 @@
 '''
-library for quantum annealing
-
-(C) Yong-Gwi Cho, Sony LSI Design Inc.
+This is a simulator of Quantum annealing.
+(C) Yong-Gwi Cho, Sony LSI Design Inc., 2019
 '''
 import random
 import numpy as np
@@ -10,8 +9,7 @@ import math
 from datetime import datetime
 
 
-def distance(r1, r2):
-    return math.sqrt((r1[1]-r2[1])**2 + (r1[0]-r2[0])**2)
+
 
 class QMC :
     def __init__(self,n,p,m,l,b,r):
@@ -24,7 +22,7 @@ class QMC :
         self.POINT = list()
         self.NCITY = 0
         self.TOTAL_TIME = 0
-        self.max_distance = 0
+        self.max_distance = 0.0
 
     def read(self,file):
         f = open(file).read().split("\n")
@@ -38,6 +36,15 @@ class QMC :
         for i in range(self.NCITY):
             for j in range(2):
                  self.POINT[i][j] = float(self.POINT[i][j])
+
+    def distance(self,r1, r2):
+        return math.sqrt((r1[1]-r2[1])**2 + (r1[0]-r2[0])**2)
+
+    def calc_max_distance(self):
+        for i in range(self.NCITY):
+            for j in range(self.NCITY):
+                if self.max_distance <= self.distance(self.POINT[i], self.POINT[j]):
+                    self.max_distance = self.distance(self.POINT[i], self.POINT[j])
 
     # save spin configuration
     def save(self):
@@ -90,15 +97,15 @@ class QMC :
         return Best_Path
 
     def getTotaldistance(self,route):
-        Total_distance = 0
+        Total_distance = 0.0
         for i in xrange(self.TOTAL_TIME):
-            Total_distance += distance(self.POINT[route[i]],self.POINT[route[(i+1)%self.TOTAL_TIME]])/self.max_distance
+            Total_distance += self.distance(self.POINT[route[i]],self.POINT[route[(i+1)%self.TOTAL_TIME]])/self.max_distance
         return Total_distance
 
     def getRealTotaldistance(self,route):
-        Total_distance = 0
+        Total_distance = 0.0
         for i in xrange(self.TOTAL_TIME):
-            Total_distance += distance(self.POINT[route[i]], self.POINT[route[(i+1)%self.TOTAL_TIME]])
+            Total_distance += self.distance(self.POINT[route[i]], self.POINT[route[(i+1)%self.TOTAL_TIME]])
         return Total_distance
 
     def move(self,conf):
@@ -114,8 +121,8 @@ class QMC :
         delta_cost = delta_costc = delta_costq_1 = delta_costq_2 = delta_costq_3 = delta_costq_4 = 0.0
 
         for j in range(self.NCITY):
-            l_p_j = distance(self.POINT[p], self.POINT[j])/self.max_distance
-            l_q_j = distance(self.POINT[q], self.POINT[j])/self.max_distance
+            l_p_j = self.distance(self.POINT[p], self.POINT[j])/self.max_distance
+            l_q_j = self.distance(self.POINT[q], self.POINT[j])/self.max_distance
             delta_costc += 2*(-l_p_j*conf[c][a][p] - l_q_j*conf[c][a][q])*(conf[c][a-1][j]+conf[c][(a+1)%self.TOTAL_TIME][j]) \
                            +2*(-l_p_j*conf[c][b][p] - l_q_j*conf[c][b][q])*(conf[c][b-1][j]+conf[c][(b+1)%self.TOTAL_TIME][j])
 
@@ -154,10 +161,10 @@ class QMC :
         delta_cost = delta_costc = delta_costq_1 = delta_costq_2 = delta_costq_3 = delta_costq_4 = 0.0
 
         for j in range(self.NCITY):
-            d_pj = distance(self.POINT[p], self.POINT[j])
-            d_qj = distance(self.POINT[q], self.POINT[j])
-
-            delta_costc += 2*(conf[c][a-1][j]+conf[c][(a+1)%self.TOTAL_TIME][j]-conf[c][b-1][j]-conf[c][(b+1)%self.TOTAL_TIME][j])*(d_qj - d_pj)
+            d_pj = self.distance(self.POINT[p], self.POINT[j])
+            d_qj = self.distance(self.POINT[q], self.POINT[j])
+            delta_costc += 2*(-d_pj*conf[c][a][p] - d_qj*conf[c][a][q])*(conf[c][a-1][j]+conf[c][(a+1)%self.TOTAL_TIME][j]) \
+                           +2*(-d_pj*conf[c][b][p] - d_qj*conf[c][b][q])*(conf[c][b-1][j]+conf[c][(b+1)%self.TOTAL_TIME][j])
 
         para = (1/self.BETA)*math.log(math.cosh(self.BETA*self.ANN_PARA/self.TROTTER_DIM)/math.sinh(self.BETA*self.ANN_PARA/self.TROTTER_DIM))
 

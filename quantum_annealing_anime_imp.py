@@ -67,7 +67,7 @@ if __name__ == '__main__':
     LengthList = list()
     for t in range(anneal.ANN_STEP):
         for i in range(anneal.MC_STEP):
-            con = anneal.move(spin)
+            con = anneal.move_imp(spin)
             rou = anneal.getBestPath(con)
             length = anneal.getRealTotaldistance(rou)
             if i%args.monitor_step == 0 :
