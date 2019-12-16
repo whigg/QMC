@@ -34,7 +34,7 @@ if __name__ == '__main__':
     config_at_init_time = list(-np.ones(anneal.NCITY,dtype=np.int))
     config_at_init_time[0] = 1
 
-    print "start..."
+    print("start...")
     t0 = time.clock()
 
     np.random.seed(100)
@@ -46,16 +46,16 @@ if __name__ == '__main__':
             path = anneal.getBestPath(con)
             length = anneal.getRealTotaldistance(path)
         LengthList.append(length)
-        print "Step:{}, Annealing Parameter:{}, length:{}".format(t+1,anneal.ANN_PARA, length)
+        print("Step:{},Annealing Parameter:{},length:{}".format(t+1,anneal.ANN_PARA, length))
         anneal.ANN_PARA *= anneal.reduc_para
 
-    Route = anneal.getBestRoute(spin)
+    Route = anneal.getBestPath(spin)
     Total_Length = anneal.getRealTotaldistance(Route)
     elapsed_time = time.clock()-t0
 
-    print "shortest path is {}".format(Route)
-    print "shortest lenght is {}".format(Total_Length)
-    print "processing time is {}s".format(elapsed_time)
+    print("shortest path is {}".format(Route))
+    print("shortest lenght is {}".format(Total_Length))
+    print("processing time is {}s".format(elapsed_time))
 
     plt.plot(LengthList)
     plt.show()

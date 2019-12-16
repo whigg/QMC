@@ -1,15 +1,14 @@
 '''
-This is a simulator of Quantum annealing.
+This is a simulator for Quantum annealing.
 (C) Yong-Gwi Cho, Sony LSI Design Inc., 2019
+
+LISENCE : GPLv3
 '''
 import random
 import numpy as np
 import os
 import math
 from datetime import datetime
-
-
-
 
 class QMC :
     def __init__(self,n,p,m,l,b,r):
@@ -69,14 +68,14 @@ class QMC :
     def spin_conf_in_a_TROTTER_DIM(self,tag,conf):
         spin = list()
         spin.append(conf)
-        for i in xrange(self.TOTAL_TIME-1):
+        for i in range(self.TOTAL_TIME-1):
             spin.append(list(self.spin_conf_at_a_time_in_a_TROTTER_DIM(tag[i])))
         return spin
 
     # whole spin configurations
     def getSpinConf(self,conf):
         spin = list()
-        for i in xrange(self.TROTTER_DIM):
+        for i in range(self.TROTTER_DIM):
             tag = np.arange(1,self.NCITY)
             np.random.shuffle(tag)
             spin.append(self.spin_conf_in_a_TROTTER_DIM(tag,conf))
@@ -84,27 +83,27 @@ class QMC :
 
     def getBestPath(self,conf):
         length = list()
-        for i in xrange(self.TROTTER_DIM):
+        for i in range(self.TROTTER_DIM):
             path = list()
-            for j in xrange(self.TOTAL_TIME):
+            for j in range(self.TOTAL_TIME):
                  path.append(conf[i][j].index(1))
             length.append(self.getTotaldistance(path))
 
         min_Tro_dim = np.argmin(length)
         Best_Path = list()
-        for i in xrange(self.TOTAL_TIME):
+        for i in range(self.TOTAL_TIME):
             Best_Path.append(conf[min_Tro_dim][i].index(1))
         return Best_Path
 
     def getTotaldistance(self,route):
         Total_distance = 0.0
-        for i in xrange(self.TOTAL_TIME):
+        for i in range(self.TOTAL_TIME):
             Total_distance += self.distance(self.POINT[route[i]],self.POINT[route[(i+1)%self.TOTAL_TIME]])/self.max_distance
         return Total_distance
 
     def getRealTotaldistance(self,route):
         Total_distance = 0.0
-        for i in xrange(self.TOTAL_TIME):
+        for i in range(self.TOTAL_TIME):
             Total_distance += self.distance(self.POINT[route[i]], self.POINT[route[(i+1)%self.TOTAL_TIME]])
         return Total_distance
 
@@ -150,7 +149,8 @@ class QMC :
 
     def move_imp(self,conf):
         c = np.random.randint(0,self.TROTTER_DIM)
-        a_ = range(1,self.TOTAL_TIME)
+        #a_ = range(1,self.TOTAL_TIME)
+        a_ = [i for i in range(1,self.TOTAL_TIME)]
         a = np.random.choice(a_)
         a_.remove(a)
         b = np.random.choice(a_)
